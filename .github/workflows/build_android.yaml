@@ -1,33 +1,54 @@
-  name: Build Android APK
-  
-  on:
-    workflow_dispatch:
-    push:
-      branches: [ "main" ]
-      paths:
-        - 'Android/**'
-    pull_request:
-      branches: [ "main" ]
-      paths:
-        - 'Android/**'
-  
-  jobs:
-    build_apk:
-      name: Build Android APK
-      runs-on: ubuntu-latest
-      defaults:
-        run:
-          working-directory: ./Android/src
-      steps:
-        - name: Checkout the source code
-          uses: actions/checkout@v3
-        - uses: actions/setup-java@v4
-          with:
-            distribution: 'temurin'
-            java-version: '21'
-        - name: Install Android SDK Platform 37
-          run: echo "y" | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager "platforms;android-37.0"
-        - name: Build
-          run: ./gradlew assembleRelease
-  
-  
+name: Build & Save Android APK
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Android/**'
+      - '.github/workflows/build_android.yaml'
+  pull_request:
+    branches: [ "main", "master" ]
+    paths:
+      - 'Android/**'
+
+jobs:
+  build_apk:
+    name: Build & Upload Android APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./Android/src
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      - name: Build Android APK (Release & Debug)
+        run: ./gradlew assembleRelease assembleDebug --stacktrace
+
+      - name: Upload & Save Release APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Google-AI-Edge-Gallery-Release-APK
+          path: Android/src/app/build/outputs/apk/release/*.apk
+          retention-days: 30
+
+      - name: Upload & Save Debug APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Google-AI-Edge-Gallery-Debug-APK
+          path: Android/src/app/build/outputs/apk/debug/*.apk
+          retention-days: 30

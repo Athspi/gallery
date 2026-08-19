@@ -1,0 +1,8 @@
+{
+  "name": "Google AI Edge Gallery",
+  "description": "On-device AI experimentation platform with model management, agent chat with interactive skills, MCP servers, mobile actions, and benchmarks.",
+  "permissions": [],
+  "capabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
