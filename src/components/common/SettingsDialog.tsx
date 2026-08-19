@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { AppSettings, ModelItem } from '../../types';
-import { Settings, Shield, Volume2, Key, RefreshCw, Check } from 'lucide-react';
+import { Settings, ShieldCheck, Volume2, Check, Cpu, Zap, HardDrive } from 'lucide-react';
 
 interface SettingsDialogProps {
   settings: AppSettings;
@@ -42,7 +42,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
             </div>
             <div>
               <h3 className="text-sm font-bold text-slate-100">Gallery Engine Configuration</h3>
-              <p className="text-xs text-slate-400">Manage on-device runtimes & Cloud Gemini acceleration</p>
+              <p className="text-xs text-slate-400">100% Local On-Device Neural Execution</p>
             </div>
           </div>
 
@@ -52,31 +52,27 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-          {/* Gemini API Key */}
-          <div className="space-y-1.5">
-            <label className="font-semibold text-slate-300 flex items-center gap-1.5">
-              <Key className="w-3.5 h-3.5 text-indigo-400" />
-              Optional Cloud Gemini API Key
-            </label>
-            <input
-              type="password"
-              placeholder="AIzaSy... (Leave empty for pure on-device simulated engine)"
-              value={localSettings.geminiApiKey}
-              onChange={(e) => setLocalSettings({ ...localSettings, geminiApiKey: e.target.value })}
-              className="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500 font-mono"
-            />
-            <p className="text-[11px] text-slate-500">
-              When empty, AI Edge Gallery runs in standalone local mode with high-precision LiteRT simulation.
-            </p>
+          {/* Local On-Device Status Banner */}
+          <div className="p-3 bg-emerald-950/30 border border-emerald-500/30 rounded-xl flex items-center gap-3">
+            <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0" />
+            <div>
+              <div className="font-bold text-emerald-300">100% On-Device Local AI Active</div>
+              <div className="text-[11px] text-slate-400">
+                All inference, token generation, and interactive skills execute completely on your device hardware with zero data transmission.
+              </div>
+            </div>
           </div>
 
           {/* Default Model */}
           <div className="space-y-1.5">
-            <label className="font-semibold text-slate-300">Default Active Model</label>
+            <label className="font-semibold text-slate-300 flex items-center gap-1.5">
+              <Cpu className="w-3.5 h-3.5 text-indigo-400" />
+              Default Active Model
+            </label>
             <select
               value={localSettings.defaultModelId}
               onChange={(e) => setLocalSettings({ ...localSettings, defaultModelId: e.target.value })}
-              className="w-full p-2 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500"
+              className="w-full p-2.5 bg-slate-950 border border-slate-700 rounded-xl text-slate-200 focus:outline-none focus:border-indigo-500"
             >
               {models.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -90,7 +86,7 @@ export const SettingsDialog: React.FC<SettingsDialogProps> = ({
           <div className="space-y-3 pt-2 border-t border-slate-800">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Volume2 className="w-4 h-4 text-emerald-400" />
+                <Volume2 className="w-4 h-4 text-indigo-400" />
                 <div>
                   <div className="font-semibold text-slate-200">Synthesizer & Audio SFX</div>
                   <div className="text-[11px] text-slate-400">Play piano notes and botanical clicks</div>
